@@ -1,5 +1,62 @@
 import React, { useState } from 'react';
-import api from '../../services/api';
+import { Link } from 'react-router-dom';
+
+// Hardcoded responses for quick questions
+const QUICK_RESPONSES = {
+  "When is the next support group?": {
+    content: "Our next support group meetings are:\n• Monday, April 15th at 6:00 PM (Online)\n• Wednesday, April 17th at 7:00 PM (Community Center)\n• Saturday, April 20th at 10:00 AM (NAMI Office)",
+    actions: [
+      { type: 'link', label: 'Register for Online Group', url: '/participant/events' },
+      { type: 'link', label: 'View Calendar', url: '/participant/events' }
+    ]
+  },
+  "How do I register for an event?": {
+    content: "To register for an event:\n1. Go to the Events page\n2. Find the event you're interested in\n3. Click the 'Register' button\n4. Fill out any required information\n\nNeed help finding an event?",
+    actions: [
+      { type: 'link', label: 'Browse Events', url: '/participant/events' },
+      { type: 'register', label: 'Contact Support', url: '/participant/support' }
+    ]
+  },
+  "I need crisis resources": {
+    content: "If you're experiencing a crisis:\n\n• Emergency: Call 911\n• National Crisis Line: 988\n• Local Crisis Line: (555) 555-5555\n\nAdditional Resources:\n• 24/7 Crisis Text Line: Text HOME to 741741\n• Local Emergency Services",
+    actions: [
+      { type: 'link', label: 'View All Resources', url: '/participant/support' },
+      { type: 'link', label: 'Contact Counselor', url: '/participant/support' }
+    ]
+  },
+  "Contact a staff member": {
+    content: "Our support team is available:\n\nMonday-Friday: 9 AM - 5 PM\nPhone: (555) 123-4567\nEmail: support@namiyolo.org\n\nFor urgent matters outside business hours, please use our crisis resources.",
+    actions: [
+      { type: 'link', label: 'Email Support', url: 'mailto:support@namiyolo.org' },
+      { type: 'link', label: 'Schedule Call', url: '/participant/support' }
+    ]
+  }
+};
+
+// General responses for non-quick questions
+const GENERAL_RESPONSES = [
+  {
+    content: "I understand you have a question. Let me help connect you with the right resource. Would you like to:",
+    actions: [
+      { type: 'link', label: 'Browse FAQs', url: '/participant/support' },
+      { type: 'link', label: 'Contact Support', url: '/participant/support' }
+    ]
+  },
+  {
+    content: "I'm here to help! You can:",
+    actions: [
+      { type: 'link', label: 'Schedule a Call', url: '/participant/support' },
+      { type: 'link', label: 'View Resources', url: '/participant/support' }
+    ]
+  },
+  {
+    content: "I'll help you find the information you need. In the meantime, you might find these helpful:",
+    actions: [
+      { type: 'link', label: 'Support Groups', url: '/participant/events' },
+      { type: 'link', label: 'Resource Library', url: '/participant/support' }
+    ]
+  }
+];
 
 function SupportChatbot() {
   const [messages, setMessages] = useState([
@@ -11,6 +68,14 @@ function SupportChatbot() {
   ]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Quick questions
+  const quickQuestions = Object.keys(QUICK_RESPONSES);
+
+  const getRandomGeneralResponse = () => {
+    const randomIndex = Math.floor(Math.random() * GENERAL_RESPONSES.length);
+    return GENERAL_RESPONSES[randomIndex];
+  };
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -24,49 +89,25 @@ function SupportChatbot() {
       sender: "user"
     };
     
-    setMessages([...messages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setNewMessage('');
     setIsLoading(true);
     
-    try {
-      // Call Snowflake API via our backend
-      const response = await api.post('/participant/support/chat', {
-        message: newMessage
-      });
+    // Simulate response delay
+    setTimeout(() => {
+      const response = QUICK_RESPONSES[newMessage] || getRandomGeneralResponse();
       
-      // Add bot response to chat
       const botMessage = {
         id: messages.length + 2,
-        content: response.data.reply,
+        content: response.content,
         sender: "bot",
-        actions: response.data.actions || []
+        actions: response.actions
       };
       
-      setMessages(prevMessages => [...prevMessages, botMessage]);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      
-      // Add error message
-      const errorMessage = {
-        id: messages.length + 2,
-        content: "Sorry, I'm having trouble connecting. Please try again or contact a support team member directly.",
-        sender: "bot",
-        isError: true
-      };
-      
-      setMessages(prevMessages => [...prevMessages, errorMessage]);
-    } finally {
+      setMessages(prev => [...prev, botMessage]);
       setIsLoading(false);
-    }
+    }, 1000);
   };
-
-  // Sample quick questions
-  const quickQuestions = [
-    "When is the next support group?",
-    "How do I register for an event?",
-    "I need crisis resources",
-    "Contact a staff member"
-  ];
 
   return (
     <div className="flex flex-col h-96">
@@ -86,25 +127,34 @@ function SupportChatbot() {
                     : 'bg-gray-100 text-gray-900'
               }`}
             >
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm whitespace-pre-line">{message.content}</p>
               
               {/* Action buttons, if any */}
               {message.actions && message.actions.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
                   {message.actions.map((action, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        if (action.type === 'link') {
-                          window.open(action.url, '_blank');
-                        } else if (action.type === 'register') {
-                          // Handle registration action
-                        }
-                      }}
-                      className="text-xs px-2 py-1 bg-white rounded border border-gray-300 hover:bg-gray-50"
-                    >
-                      {action.label}
-                    </button>
+                    action.type === 'link' ? (
+                      <Link
+                        key={index}
+                        to={action.url}
+                        className="text-xs px-2 py-1 bg-white rounded border border-gray-300 hover:bg-gray-50"
+                      >
+                        {action.label}
+                      </Link>
+                    ) : (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          // Handle other action types if needed
+                          if (action.type === 'register') {
+                            // Handle registration action
+                          }
+                        }}
+                        className="text-xs px-2 py-1 bg-white rounded border border-gray-300 hover:bg-gray-50"
+                      >
+                        {action.label}
+                      </button>
+                    )
                   ))}
                 </div>
               )}
