@@ -13,6 +13,7 @@ const volunteerRoutes = require('./routes/volunteer');
 const participantRoutes = require('./routes/participant');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const opportunitiesRoutes = require('./routes/opportunities');
 
 // Load environment variables
 dotenv.config();
@@ -35,6 +36,7 @@ const jwtCheck = auth({
 
 // Public routes
 app.use('/api/auth', authRoutes);
+app.use('/api/opportunities', opportunitiesRoutes);
 
 // Protected routes
 app.use('/api/admin', jwtCheck, adminRoutes);

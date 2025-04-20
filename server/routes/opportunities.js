@@ -5,7 +5,7 @@ const path = require('path');
 const Papa = require('papaparse');
 
 router.get('/', (req, res) => {
-  const filePath = path.join(__dirname, '../../visualizations/data/nyc-service-volunteer-opportunities.csv');
+  const filePath = path.join(__dirname, '../../dataset/nyc-service-volunteer-opportunities.csv');
   const csv = fs.readFileSync(filePath, 'utf8');
   Papa.parse(csv, {
     header: true,
