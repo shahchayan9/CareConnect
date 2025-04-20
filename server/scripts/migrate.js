@@ -1,8 +1,9 @@
 require('dotenv').config();
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const { Pool } = require('pg');
 const config = require('../config');
+const db = require('../db');
 
 const pool = new Pool({
   host: config.db.host,
@@ -14,51 +15,30 @@ const pool = new Pool({
 
 async function runMigrations() {
   try {
+    // Read all migration files
+    const migrationsDir = path.join(__dirname, '../db/migrations');
+    const files = await fs.readdir(migrationsDir);
+    
+    // Sort files to ensure they run in order
+    const migrationFiles = files
+      .filter(f => f.endsWith('.sql'))
+      .sort();
+    
     console.log('Running migrations...');
     
-    // Get all migration files from the migrations directory
-    const migrationsDir = path.join(__dirname, '../database/migrations');
-    const migrationFiles = fs.readdirSync(migrationsDir)
-      .filter(file => file.endsWith('.sql'))
-      .sort(); // Sort to ensure correct order
-    
-    // Create migrations table if it doesn't exist
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS migrations (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        applied_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
-    `);
-    
-    // Get list of already applied migrations
-    const appliedMigrations = await pool.query('SELECT name FROM migrations');
-    const appliedMigrationNames = appliedMigrations.rows.map(row => row.name);
-    
-    // Apply each migration that hasn't been applied yet
+    // Run each migration
     for (const file of migrationFiles) {
-      if (!appliedMigrationNames.includes(file)) {
-        console.log(`Applying migration: ${file}`);
-        
-        // Read and execute the migration file
-        const migrationContent = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
-        await pool.query(migrationContent);
-        
-        // Record that the migration was applied
-        await pool.query('INSERT INTO migrations (name) VALUES ($1)', [file]);
-        
-        console.log(`Migration applied: ${file}`);
-      } else {
-        console.log(`Migration already applied: ${file}`);
-      }
+      console.log(`Running migration: ${file}`);
+      const sql = await fs.readFile(path.join(migrationsDir, file), 'utf-8');
+      await db.query(sql);
+      console.log(`Completed migration: ${file}`);
     }
     
-    console.log('Migrations completed successfully!');
+    console.log('All migrations completed successfully!');
+    process.exit(0);
   } catch (error) {
-    console.error('Error running migrations:', error);
+    console.error('Migration failed:', error);
     process.exit(1);
-  } finally {
-    await pool.end();
   }
 }
 
