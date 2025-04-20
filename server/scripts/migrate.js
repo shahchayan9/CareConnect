@@ -15,8 +15,27 @@ const pool = new Pool({
 
 async function runMigrations() {
   try {
+    // Drop all existing tables
+    console.log('Dropping existing tables...');
+    await db.query(`
+      DROP TABLE IF EXISTS 
+        volunteer_trainings,
+        event_volunteers,
+        participant_events,
+        feedback,
+        volunteer_availability,
+        resources,
+        events,
+        trainings,
+        volunteers,
+        participants,
+        users
+      CASCADE;
+    `);
+    console.log('Existing tables dropped.');
+
     // Read all migration files
-    const migrationsDir = path.join(__dirname, '../db/migrations');
+    const migrationsDir = path.join(__dirname, '../database/migrations');
     const files = await fs.readdir(migrationsDir);
     
     // Sort files to ensure they run in order

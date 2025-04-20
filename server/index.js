@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const { auth } = require('express-oauth2-jwt-bearer');
 const errorHandler = require('./middleware/errorHandler');
 const config = require('./config');
+const dotenv = require('dotenv');
 
 // Import routes
 const adminRoutes = require('./routes/admin');
@@ -12,6 +13,9 @@ const volunteerRoutes = require('./routes/volunteer');
 const participantRoutes = require('./routes/participant');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+
+// Load environment variables
+dotenv.config();
 
 // Create Express app
 const app = express();
