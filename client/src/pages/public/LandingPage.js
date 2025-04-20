@@ -92,13 +92,13 @@ function LandingPage() {
             <div className="flex-1" />
             <div className="flex-1 w-full bg-blue-50" />
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <img
               className="relative rounded-lg shadow-lg"
               src="https://source.unsplash.com/random/1184x1376?mental+health"
               alt="App screenshot"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
