@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { FaUserCircle, FaBars, FaTimes, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function MainLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -17,6 +19,15 @@ function MainLayout({ children }) {
 
   // Determine if we're on the login page
   const isLoginPage = location.pathname === '/login';
+
+  const handleLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin + '/login'
+      }
+    });
+    setUserMenuOpen(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -55,9 +66,7 @@ function MainLayout({ children }) {
               </div>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              {isLoginPage ? (
-                <div></div>
-              ) : (
+              {isAuthenticated ? (
                 <div className="ml-3 relative">
                   <div>
                     <button
@@ -68,9 +77,17 @@ function MainLayout({ children }) {
                       aria-haspopup="true"
                     >
                       <span className="sr-only">Open user menu</span>
-                      <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                        <FaUserCircle className="h-5 w-5 text-blue-600" />
-                      </div>
+                      {user?.picture ? (
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src={user.picture}
+                          alt={user.name}
+                        />
+                      ) : (
+                        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+                          <FaUserCircle className="h-5 w-5 text-blue-600" />
+                        </div>
+                      )}
                     </button>
                   </div>
 
@@ -86,6 +103,7 @@ function MainLayout({ children }) {
                         to="/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
                       >
                         Your Profile
                       </Link>
@@ -93,36 +111,33 @@ function MainLayout({ children }) {
                         to="/settings"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
+                        onClick={() => setUserMenuOpen(false)}
                       >
                         <div className="flex items-center">
                           <FaCog className="mr-2" />
                           Settings
                         </div>
                       </Link>
-                      <Link
-                        to="/logout"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-150 ease-in-out"
                         role="menuitem"
                       >
                         <div className="flex items-center">
-                          <FaSignOutAlt className="mr-2" />
-                          Sign out
+                          <FaSignOutAlt className="mr-2 text-gray-500" />
+                          <span className="hover:text-blue-600">Sign out</span>
                         </div>
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>
-              )}
-
-              {!isLoginPage && (
-                <div className="ml-4">
-                  <Link
-                    to="/login"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                  >
-                    Log in
-                  </Link>
-                </div>
+              ) : (
+                <button
+                  onClick={() => loginWithRedirect()}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Log in
+                </button>
               )}
             </div>
 
@@ -165,49 +180,64 @@ function MainLayout({ children }) {
               })}
             </div>
             <div className="pt-4 pb-3 border-t border-gray-200">
-              {!isLoginPage && (
+              {isAuthenticated ? (
                 <>
                   <div className="flex items-center px-4">
                     <div className="flex-shrink-0">
-                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                        <FaUserCircle className="h-6 w-6 text-blue-600" />
-                      </div>
+                      {user?.picture ? (
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={user.picture}
+                          alt={user.name}
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <FaUserCircle className="h-6 w-6 text-blue-600" />
+                        </div>
+                      )}
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium text-gray-800">Guest User</div>
-                      <div className="text-sm font-medium text-gray-500">guest@example.com</div>
+                      <div className="text-base font-medium text-gray-800">{user?.name}</div>
+                      <div className="text-sm font-medium text-gray-500">{user?.email}</div>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1">
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
                     <Link
                       to="/settings"
                       className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       Settings
                     </Link>
-                    <Link
-                      to="/logout"
-                      className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 cursor-pointer"
                     >
-                      Sign out
-                    </Link>
+                      <div className="flex items-center">
+                        <FaSignOutAlt className="mr-2" />
+                        Sign out
+                      </div>
+                    </button>
                   </div>
                 </>
-              )}
-              {isLoginPage && (
-                <div className="mt-3 px-4">
-                  <Link
-                    to="/login"
-                    className="block text-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+              ) : (
+                <div className="mt-3 space-y-1">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      loginWithRedirect();
+                    }}
+                    className="w-full text-left block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                   >
                     Log in
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>

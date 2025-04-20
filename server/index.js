@@ -25,8 +25,8 @@ app.use(express.json());
 // Auth0 JWT validation middleware
 const jwtCheck = auth({
   audience: config.auth0.audience,
-  issuerBaseURL: `https://${config.auth0.domain}/`,
-  tokenSigningAlg: 'RS256'
+  issuerBaseURL: `https://${config.auth0.domain}`,
+  algorithms: ['RS256']
 });
 
 // Public routes

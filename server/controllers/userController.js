@@ -4,19 +4,44 @@ const auth0Service = require('../services/auth0Service');
 const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.auth.payload.sub;
+    const userInfo = req.auth.payload;
     
-    // Get user profile from database based on Auth0 ID
-    const result = await db.query(
+    // First try to get existing user
+    let result = await db.query(
       `SELECT * FROM users WHERE auth0_id = $1`,
       [userId]
     );
     
+    // If user doesn't exist, create them
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'User profile not found' });
+      result = await db.query(
+        `INSERT INTO users (
+          auth0_id, 
+          email, 
+          first_name, 
+          last_name, 
+          created_at, 
+          updated_at
+        ) VALUES ($1, $2, $3, $4, NOW(), NOW())
+        RETURNING *`,
+        [
+          userId,
+          userInfo.email,
+          userInfo.given_name || '',
+          userInfo.family_name || ''
+        ]
+      );
     }
     
-    res.json(result.rows[0]);
+    // Add roles from Auth0 token to the response
+    const userProfile = {
+      ...result.rows[0],
+      roles: userInfo['https://communitycareacc.com/roles'] || []
+    };
+    
+    res.json(userProfile);
   } catch (error) {
+    console.error('Error in getUserProfile:', error);
     next(error);
   }
 };

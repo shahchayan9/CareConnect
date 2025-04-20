@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS trainings (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    instructor VARCHAR(255),
+    capacity INTEGER,
+    start_date TIMESTAMP WITH TIME ZONE,
+    end_date TIMESTAMP WITH TIME ZONE,
+    location VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'upcoming',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+); 
