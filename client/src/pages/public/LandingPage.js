@@ -58,7 +58,7 @@ function LandingPage() {
           <div className="mt-16 mx-auto max-w-7xl px-4 sm:mt-24 sm:px-6">
             <div className="text-center">
               <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block">MindfulMatch</span>
+                <span className="block">CareConnect</span>
                 <span className="block text-blue-600">Volunteer Management</span>
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
@@ -236,7 +236,7 @@ function LandingPage() {
                     <div className="block mt-2">
                       <p className="text-xl font-semibold text-gray-900">Sarah W.</p>
                       <p className="mt-3 text-base text-gray-500">
-                        "MindfulMatch has made it so much easier to find volunteer opportunities that match my 
+                        "CareConnect has made it so much easier to find volunteer opportunities that match my 
                         skills and schedule. I can track my training progress and see the direct impact of my 
                         volunteer hours."
                       </p>

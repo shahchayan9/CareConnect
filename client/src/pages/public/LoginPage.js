@@ -267,7 +267,7 @@ function LoginPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Protected by reCAPTCHA and subject to the MindfulMatch
+                  Protected by reCAPTCHA and subject to the CareConnect
                 </span>
               </div>
             </div>

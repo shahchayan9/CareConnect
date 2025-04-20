@@ -43,7 +43,7 @@ function MainLayout({ children }) {
                       <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                     </svg>
                   </div>
-                  <span className="ml-2 text-xl font-bold text-blue-600">MindfulMatch</span>
+                  <span className="ml-2 text-xl font-bold text-blue-600">CareConnect</span>
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -334,7 +334,7 @@ function MainLayout({ children }) {
             </a>
           </div>
           <p className="mt-8 text-center text-base text-gray-400">
-            &copy; {new Date().getFullYear()} MindfulMatch. All rights reserved.
+            &copy; {new Date().getFullYear()} CareConnect. All rights reserved.
           </p>
         </div>
       </footer>
