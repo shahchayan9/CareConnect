@@ -14,6 +14,7 @@ import ParticipantLayout from './components/layouts/ParticipantLayout';
 import LandingPage from './pages/public/LandingPage';
 import AboutPage from './pages/public/AboutPage';
 import LoginPage from './pages/public/LoginPage';
+import RegistrationPage from './pages/public/RegistrationPage';
 import NotFoundPage from './pages/public/NotFoundPage';
 import UnauthorizedPage from './pages/public/UnauthorizedPage';
 
@@ -77,8 +78,12 @@ function App() {
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-        scope: "openid profile email"
+        scope: "openid profile email",
+        response_type: "token id_token",
+        prompt: "login"
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <AuthProvider>
         <UserProvider>
@@ -89,6 +94,7 @@ function App() {
                 <Route index element={<LandingPage />} />
                 <Route path="about" element={<AboutPage />} />
                 <Route path="login" element={<LoginPage />} />
+                <Route path="register" element={<RegistrationPage />} />
                 <Route path="unauthorized" element={<UnauthorizedPage />} />
                 <Route path="auth-test" element={<Auth0Test />} />
               </Route>
