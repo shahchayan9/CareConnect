@@ -180,8 +180,3 @@ CREATE TABLE resources (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
--- database/seeds/01_sample_data.sql
-
--- Insert sample users
-INSERT INTO
