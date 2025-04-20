@@ -17,9 +17,9 @@ import NotFoundPage from './pages/public/NotFoundPage';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
-// import ManageVolunteers from './pages/admin/ManageVolunteers';
-// import ManageTrainings from './pages/admin/ManageTrainings';
-// import ManageEvents from './pages/admin/ManageEvents';
+import ManageVolunteers from './pages/admin/ManageVolunteers';
+import ManageTrainings from './pages/admin/ManageTrainings';
+import ManageEvents from './pages/admin/ManageEvents';
 // import VolunteerMap from './pages/admin/VolunteerMap';
 // import AdminReports from './pages/admin/Reports';
 // import AdminSettings from './pages/admin/Settings';
@@ -82,17 +82,19 @@ function App() {
             <Route 
               path="/admin" 
               element={
-                <ProtectedRoute 
-                  element={<AdminLayout />} 
-                  requiredRole="admin"
-                />
+                // <ProtectedRoute 
+                  // element={
+                  <AdminLayout />
+                // } 
+                  // requiredRole="admin"
+                // />
               }
             >
               <Route index element={<AdminDashboard />} />
-              {/* <Route path="volunteers" element={<ManageVolunteers />} /> */}
-              {/* <Route path="trainings" element={<ManageTrainings />} />
+              <Route path="volunteers" element={<ManageVolunteers />} />
+              <Route path="trainings" element={<ManageTrainings />} />
               <Route path="events" element={<ManageEvents />} />
-              <Route path="map" element={<VolunteerMap />} />
+              {/* <Route path="map" element={<VolunteerMap />} />
               <Route path="reports" element={<AdminReports />} />
               <Route path="settings" element={<AdminSettings />} /> */}
             </Route>
