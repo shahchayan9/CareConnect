@@ -246,6 +246,23 @@ const AdminVisuals = () => {
     ]
   };
 
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        const newEntries = results.data;
+        // Append new data to existing dataset
+        setData((prevData) => [...prevData, ...newEntries]);
+      }
+    });
+  };
+  
+  
   return (
     <div className="flex-1 overflow-auto bg-gray-50">
       <div className="py-4">
@@ -257,7 +274,67 @@ const AdminVisuals = () => {
                 Analyze community engagement and event patterns across categories and boroughs
               </p>
             </div>
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => handleFileUpload(e)}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer transition-colors duration-200"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    />
+                  </svg>
+                  Upload Dataset
+                </label>
+              </div>
+              <div className="text-xs text-gray-500">
+                <p>Supported format: CSV</p>
+                <p>Max size: 10MB</p>
+              </div>
+            </div>
           </div>
+
+          {/* File Upload Status */}
+          {data.length > 0 && (
+            <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex items-center">
+                <svg
+                  className="w-5 h-5 text-green-500 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span className="text-sm text-green-700">
+                  Dataset loaded successfully! {data.length} records found.
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Filters */}
           <div className="bg-white shadow rounded-lg p-3 mb-4">
