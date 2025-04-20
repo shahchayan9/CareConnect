@@ -39,6 +39,7 @@ import ParticipantProfile from './pages/participant/Profile';
 import ParticipantEvents from './pages/participant/Events';
 import ParticipantFeedback from './pages/participant/Feedback';
 import ParticipantSupport from './pages/participant/Support';
+import AdminVisuals from './components/admin/Visualizations';
 
 // Auth Guards
 const ProtectedRoute = ({ element, requiredRole }) => {
@@ -107,8 +108,8 @@ function App() {
                 <Route path="trainings" element={<ManageTrainings />} />
                 <Route path="events" element={<ManageEvents />} />
                 <Route path="map" element={<VolunteerMap />} />
-                <Route path="reports" element={<AdminReports />} />
-                <Route path="settings" element={<AdminSettings />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="settings" element={<Settings />} />
               </Route>
               
               {/* Volunteer Routes */}
@@ -117,15 +118,15 @@ function App() {
                 element={
                   <ProtectedRoute 
                     element={<VolunteerLayout />} 
-                    requiredRole="volunteer"
+                    requiredRole="Volunteer"
                   />
                 }
               >
                 <Route index element={<VolunteerDashboard />} />
-                {/* <Route path="profile" element={<VolunteerProfile />} />
+                <Route path="profile" element={<VolunteerProfile />} />
                 <Route path="trainings" element={<VolunteerTrainings />} />
                 <Route path="events" element={<VolunteerEvents />} />
-                <Route path="feedback" element={<VolunteerFeedback />} /> */}
+                <Route path="feedback" element={<VolunteerFeedback />} />
               </Route>
               
               {/* Participant Routes */}
@@ -134,17 +135,17 @@ function App() {
                 element={
                   <ProtectedRoute 
                     element={<ParticipantLayout />} 
-                    requiredRole="participant"
+                    requiredRole="Participant"
                   />
                 }
               >
                 <Route index element={<ParticipantDashboard />} />
-                {/* <Route path="profile" element={<ParticipantProfile />} />
+                <Route path="profile" element={<ParticipantProfile />} />
                 <Route path="events" element={<ParticipantEvents />} />
                 <Route path="feedback" element={<ParticipantFeedback />} />
-                <Route path="support" element={<ParticipantSupport />} /> */}
+                <Route path="support" element={<ParticipantSupport />} />
               </Route>
-              
+              <Route path="/admin/analytics" element={<AdminVisuals />} />
               {/* Catch-all route */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
