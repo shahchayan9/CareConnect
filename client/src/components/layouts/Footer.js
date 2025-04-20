@@ -12,10 +12,10 @@ function Footer() {
               <img
                 className="h-10 w-auto"
                 src="/logo.png"
-                alt="CommunityCare"
+                alt="CareConnect"
               />
               <span className="ml-3 text-xl font-bold text-gray-900">
-                CommunityCare
+                CareConnect
               </span>
             </div>
             <p className="text-gray-500 text-base">
@@ -153,7 +153,7 @@ function Footer() {
         </div>
         <div className="mt-12 border-t border-gray-200 pt-8">
           <p className="text-base text-gray-400 text-center">
-            &copy; {new Date().getFullYear()} CommunityCare for NAMI Yolo. All rights reserved.
+            &copy; {new Date().getFullYear()} CareConnect for NAMI Yolo. All rights reserved.
           </p>
         </div>
       </div>
