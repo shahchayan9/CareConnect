@@ -1,5 +1,118 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+// Simulated AI Service Integration
+class AIServices {
+  static async analyzeIntent(message) {
+    await new Promise(resolve => setTimeout(resolve, 800));
+    const intents = ['support', 'crisis', 'event', 'general'];
+    return {
+      topIntent: intents[Math.floor(Math.random() * intents.length)],
+      confidence: 0.7 + Math.random() * 0.3,
+      entities: this.extractEntities(message)
+    };
+  }
+
+  static async analyzeSentiment(message) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return {
+      sentiment: Math.random() > 0.7 ? 'negative' : 'neutral',
+      urgency: message.toLowerCase().includes('urgent') ? 'high' : 'normal',
+      emotionalState: this.detectEmotionalState(message)
+    };
+  }
+
+  static detectEmotionalState(message) {
+    const emotionKeywords = {
+      anxious: ['worried', 'anxious', 'nervous', 'scared'],
+      distressed: ['help', 'crisis', 'emergency', 'urgent'],
+      confused: ['confused', 'unsure', 'don\'t understand', 'what'],
+      neutral: []
+    };
+
+    for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
+      if (keywords.some(keyword => message.toLowerCase().includes(keyword))) {
+        return emotion;
+      }
+    }
+    return 'neutral';
+  }
+
+  static extractEntities(message) {
+    const entities = [];
+    const datePattern = /\b(today|tomorrow|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i;
+    const timePattern = /\b(\d{1,2}(?::\d{2})?\s*(?:am|pm)?)\b/i;
+    const locationPattern = /\b(office|center|online|zoom)\b/i;
+
+    const dateMatch = message.match(datePattern);
+    const timeMatch = message.match(timePattern);
+    const locationMatch = message.match(locationPattern);
+
+    if (dateMatch) entities.push({ type: 'date', value: dateMatch[0] });
+    if (timeMatch) entities.push({ type: 'time', value: timeMatch[0] });
+    if (locationMatch) entities.push({ type: 'location', value: locationMatch[0] });
+
+    return entities;
+  }
+
+  static async generateResponse(message, intent, sentiment) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Crisis detection takes priority
+    if (sentiment.urgency === 'high' || sentiment.sentiment === 'negative') {
+      return QUICK_RESPONSES["I need crisis resources"];
+    }
+
+    // Check quick responses first
+    if (QUICK_RESPONSES[message]) {
+      return {
+        ...QUICK_RESPONSES[message],
+        metadata: { source: 'quick_responses', confidence: 0.98 }
+      };
+    }
+
+    // Generate contextual response based on intent and sentiment
+    const response = this.generateContextualResponse(intent, sentiment);
+    await this.simulateStreamingResponse(response.content);
+    return response;
+  }
+
+  static generateContextualResponse(intent, sentiment) {
+    const baseResponses = {
+      support: {
+        content: "I understand you're looking for support. Let me help connect you with the right resources:\n\n• For immediate assistance: (555) 123-4567\n• Email: support@namiyolo.org\n• Live chat: Available 9 AM - 5 PM\n\nWould you like me to help you schedule a consultation?",
+        actions: [
+          { type: 'link', label: 'Schedule Consultation', url: '/participant/support' },
+          { type: 'link', label: 'View Resources', url: '/participant/support' }
+        ]
+      },
+      crisis: QUICK_RESPONSES["I need crisis resources"],
+      event: QUICK_RESPONSES["How do I register for an event?"],
+      general: {
+        content: "I can help you with:\n\n• Finding support groups\n• Registering for events\n• Accessing resources\n• Connecting with counselors\n\nWhat would you like to know more about?",
+        actions: [
+          { type: 'link', label: 'Browse Services', url: '/participant/support' },
+          { type: 'link', label: 'Contact Us', url: '/participant/support' }
+        ]
+      }
+    };
+
+    return {
+      ...baseResponses[intent],
+      metadata: {
+        source: 'contextual',
+        confidence: 0.85,
+        sentiment: sentiment.sentiment,
+        emotionalState: sentiment.emotionalState
+      }
+    };
+  }
+
+  static async simulateStreamingResponse(content) {
+    // This would normally stream the response, but we'll just simulate the delay
+    await new Promise(resolve => setTimeout(resolve, content.length * 10));
+  }
+}
 
 // Hardcoded responses for quick questions
 const QUICK_RESPONSES = {
@@ -33,48 +146,36 @@ const QUICK_RESPONSES = {
   }
 };
 
-// General responses for non-quick questions
-const GENERAL_RESPONSES = [
-  {
-    content: "I understand you have a question. Let me help connect you with the right resource. Would you like to:",
-    actions: [
-      { type: 'link', label: 'Browse FAQs', url: '/participant/support' },
-      { type: 'link', label: 'Contact Support', url: '/participant/support' }
-    ]
-  },
-  {
-    content: "I'm here to help! You can:",
-    actions: [
-      { type: 'link', label: 'Schedule a Call', url: '/participant/support' },
-      { type: 'link', label: 'View Resources', url: '/participant/support' }
-    ]
-  },
-  {
-    content: "I'll help you find the information you need. In the meantime, you might find these helpful:",
-    actions: [
-      { type: 'link', label: 'Support Groups', url: '/participant/events' },
-      { type: 'link', label: 'Resource Library', url: '/participant/support' }
-    ]
-  }
-];
-
 function SupportChatbot() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      content: "Hi there! How can I help you today?",
+      content: "Hi there! I'm the NAMI Yolo AI Assistant. How can I help you today?",
       sender: "bot"
     }
   ]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [processingSteps, setProcessingSteps] = useState([]);
 
   // Quick questions
   const quickQuestions = Object.keys(QUICK_RESPONSES);
 
-  const getRandomGeneralResponse = () => {
-    const randomIndex = Math.floor(Math.random() * GENERAL_RESPONSES.length);
-    return GENERAL_RESPONSES[randomIndex];
+  // Cleanup processing steps
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (processingSteps.length > 0 && !isLoading) {
+        setProcessingSteps([]);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [processingSteps, isLoading]);
+
+  const addProcessingStep = (step) => {
+    setProcessingSteps(prev => [...prev, step]);
   };
 
   const sendMessage = async (e) => {
@@ -92,21 +193,78 @@ function SupportChatbot() {
     setMessages(prev => [...prev, userMessage]);
     setNewMessage('');
     setIsLoading(true);
+    setIsAnalyzing(true);
     
-    // Simulate response delay
-    setTimeout(() => {
-      const response = QUICK_RESPONSES[newMessage] || getRandomGeneralResponse();
+    try {
+      // Simulate intent analysis
+      addProcessingStep("Analyzing message intent...");
+      const intentAnalysis = await AIServices.analyzeIntent(newMessage);
       
+      // Simulate sentiment analysis
+      addProcessingStep("Processing sentiment...");
+      const sentimentAnalysis = await AIServices.analyzeSentiment(newMessage);
+      
+      // Add thinking message for low confidence or negative sentiment
+      if (intentAnalysis.confidence < 0.8 || sentimentAnalysis.sentiment === 'negative') {
+        setIsTyping(true);
+        addProcessingStep("Evaluating response options...");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      
+      // Generate response
+      addProcessingStep("Generating response...");
+      const response = await AIServices.generateResponse(
+        newMessage,
+        intentAnalysis.topIntent,
+        sentimentAnalysis
+      );
+      
+      // Add bot response
       const botMessage = {
         id: messages.length + 2,
         content: response.content,
         sender: "bot",
-        actions: response.actions
+        actions: response.actions,
+        metadata: response.metadata
       };
       
-      setMessages(prev => [...prev, botMessage]);
+      setMessages(prev => prev.filter(m => !m.isThinking).concat(botMessage));
+      
+      // Add follow-up for negative sentiment
+      if (sentimentAnalysis.sentiment === 'negative') {
+        setTimeout(() => {
+          const followUp = {
+            id: messages.length + 3,
+            content: "I notice you might be feeling distressed. Would you like me to connect you with a counselor?",
+            sender: "bot",
+            actions: [
+              { type: 'link', label: 'Talk to Someone Now', url: '/participant/support' },
+              { type: 'link', label: 'View Resources', url: '/participant/support' }
+            ]
+          };
+          setMessages(prev => [...prev, followUp]);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error processing message:', error);
+      
+      const errorMessage = {
+        id: messages.length + 2,
+        content: "I apologize, but I'm having trouble processing your request. Please try again or contact our support team directly at support@namiyolo.org",
+        sender: "bot",
+        isError: true,
+        actions: [
+          { type: 'link', label: 'Email Support', url: 'mailto:support@namiyolo.org' },
+          { type: 'link', label: 'Contact Us', url: '/participant/support' }
+        ]
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+      setIsAnalyzing(false);
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -124,7 +282,9 @@ function SupportChatbot() {
                   ? 'bg-blue-100 text-blue-900' 
                   : message.isError 
                     ? 'bg-red-50 text-red-900' 
-                    : 'bg-gray-100 text-gray-900'
+                    : message.isThinking
+                      ? 'bg-yellow-50 text-yellow-900'
+                      : 'bg-gray-100 text-gray-900'
               }`}
             >
               <p className="text-sm whitespace-pre-line">{message.content}</p>
@@ -145,7 +305,6 @@ function SupportChatbot() {
                       <button
                         key={index}
                         onClick={() => {
-                          // Handle other action types if needed
                           if (action.type === 'register') {
                             // Handle registration action
                           }
@@ -162,6 +321,18 @@ function SupportChatbot() {
           </div>
         ))}
         
+        {/* Processing steps indicator */}
+        {(isAnalyzing || isTyping) && processingSteps.length > 0 && (
+          <div className="flex flex-col space-y-1">
+            {processingSteps.map((step, index) => (
+              <div key={index} className="text-xs text-gray-500 italic">
+                {step}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Typing indicator */}
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-gray-100 rounded-lg px-3 py-2">
