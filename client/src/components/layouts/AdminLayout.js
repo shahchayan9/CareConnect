@@ -29,6 +29,7 @@ function AdminLayout() {
     { name: 'Trainings', to: '/admin/trainings', icon: FaGraduationCap },
     { name: 'Volunteer Map', to: '/admin/map', icon: FaMapMarkedAlt },
     { name: 'Reports', to: '/admin/reports', icon: FaChartBar },
+    { name: 'Analytics', to: '/admin/analytics', icon: FaChartBar },
     { name: 'Settings', to: '/admin/settings', icon: FaCog },
   ];
 

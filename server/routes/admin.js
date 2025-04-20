@@ -39,6 +39,7 @@ router.get('/reports/volunteer-hours', adminController.getVolunteerHoursReport);
 router.get('/reports/training-completion', adminController.getTrainingCompletionReport);
 router.get('/reports/feedback-summary', adminController.getFeedbackSummaryReport);
 
+router.get('/analytics', adminController.getRegionalData);
 // RAG Query
 router.post('/rag-query', adminController.processRagQuery);
 

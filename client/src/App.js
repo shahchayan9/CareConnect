@@ -39,6 +39,7 @@ import ParticipantProfile from './pages/participant/Profile';
 import ParticipantEvents from './pages/participant/Events';
 import ParticipantFeedback from './pages/participant/Feedback';
 import ParticipantSupport from './pages/participant/Support';
+import AdminVisuals from './components/admin/Visualizations';
 
 // Auth Guards
 const ProtectedRoute = ({ element, requiredRole }) => {
@@ -144,7 +145,7 @@ function App() {
                 <Route path="feedback" element={<ParticipantFeedback />} />
                 <Route path="support" element={<ParticipantSupport />} />
               </Route>
-              
+              <Route path="/admin/analytics" element={<AdminVisuals />} />
               {/* Catch-all route */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
