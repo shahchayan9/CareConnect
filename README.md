@@ -1,8 +1,56 @@
-# 🗽 CommunityCare NYC – Volunteer Opportunity Insights
+# CareConnect – Centralized Volunteer Management Platform
 
-This project presents both **static and dynamic visualizations** of New York City volunteer opportunities to support **social good initiatives**. Built for the **HackDavis Open Data Hack**, it helps explore when, where, and how communities engage in volunteer work.
+**CareConnect** is a full-stack volunteer management system built to support community-focused organizations like **NAMI Yolo**. It helps nonprofits recruit, onboard, train, and schedule volunteers with ease. The platform is built for accessibility, especially for organizations currently managing data across multiple spreadsheets and forms.
+
+This submission includes:
+- A dynamic **web dashboard** for real-time visual insights into volunteer trends.
+- A reproducible **Google Colab notebook** for static data visualizations.
+- A publicly accessible dataset used to simulate real-world volunteer data.
 
 ---
+
+## Why CareConnect?
+
+Many mental health and nonprofit organizations rely on **manual, spreadsheet-based workflows** for managing volunteers. This makes it hard to:
+- Track training completions and event history
+- Match volunteers with relevant tasks
+- Analyze community engagement patterns
+
+CareConnect replaces this with an **intuitive platform** accessible to **non-technical staff** and optimized for **social impact**. It centralizes data and empowers admins to make informed decisions through both real-time dashboards and AI-driven insights (planned).
+
+---
+
+## Hackathon Tracks Alignment
+
+This project was submitted to multiple tracks of HackDavis 2025, including:
+
+- **Best Hack for Social Good** – Solving volunteer management for nonprofits like NAMI Yolo
+- **Open Data Hack** – Uses a public dataset for static and dynamic visualizations
+- **NAMI Yolo Challenge** – Specifically built around their current spreadsheet-based limitations
+- **Best Use of Auth0** – Role-based access and authentication
+- **Hackers' Choice Award**
+
+---
+
+## Open Data Hack Track: Dataset & Visualizations
+
+We did not have access to UC Davis-specific datasets, so we used a **publicly available Kaggle dataset** of NYC volunteer opportunities, which closely mirrors UC Davis volunteer activities.
+
+UC Davis or similar institutions can easily adapt CareConnect for:
+- Matching students with on-campus jobs or volunteering roles
+- Visualizing department-wise participation
+- Making data-driven decisions for outreach and equity
+
+### Static Visualizations
+
+We provide a Python-based notebook for reproducible, high-quality charts submitted as part of the Open Data Hack track.
+
+**Includes:**
+- Heatmaps
+- Category trends
+- Borough distributions
+- Volunteer request summaries
+
 
 ## Static Visualizations (Google Colab)
 
@@ -63,8 +111,8 @@ Built with **React.js** and **Chart.js**, this live dashboard allows:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/CommunityCare.git
-cd CommunityCare
+git clone https://github.com/shahchayan9/CareConnect.git
+cd CareConnect
 ```
 
 2. **Install Dependencies**
@@ -144,21 +192,10 @@ The visualizations process the following key fields from the dataset:
 This project is submitted for:
 
 - **HackDavis 2025 – Open Data Hack (Social Good Track)**
-- By: Rutuja Nemane and team
+- By: Team CareConnect
 
 ---
 
-## Questions?
-
-Feel free to reach out for collaborations or demo access!
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## Acknowledgments
 

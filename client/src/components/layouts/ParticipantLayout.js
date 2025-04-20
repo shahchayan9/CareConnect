@@ -42,10 +42,10 @@ function ParticipantLayout() {
               {/* <img
                 className="h-8 w-auto"
                 src="/logo.png"
-                alt="CommunityCare"
+                alt="CareConnect"
               /> */}
               <span className="ml-2 text-lg font-semibold text-gray-900">
-                CommunityCare
+                CareConnect
               </span>
             </div>
             
@@ -129,10 +129,10 @@ function ParticipantLayout() {
                   <img
                     className="h-8 w-auto"
                     src="/logo.png"
-                    alt="CommunityCare"
+                    alt="CareConnect"
                   />
                   <span className="ml-2 text-lg font-semibold text-gray-900">
-                    CommunityCare
+                    CareConnect
                   </span>
                 </div>
                 
