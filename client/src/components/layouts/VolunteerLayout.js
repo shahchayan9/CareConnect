@@ -39,11 +39,11 @@ function VolunteerLayout() {
         <div className="flex flex-col w-64 border-r border-gray-200 bg-white">
           <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <img
+              {/* <img
                 className="h-8 w-auto"
                 src="/logo.png"
                 alt="CommunityCare"
-              />
+              /> */}
               <span className="ml-2 text-lg font-semibold text-gray-900">
                 CommunityCare
               </span>

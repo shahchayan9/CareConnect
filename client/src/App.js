@@ -20,23 +20,23 @@ import AdminDashboard from './pages/admin/Dashboard';
 import ManageVolunteers from './pages/admin/ManageVolunteers';
 import ManageTrainings from './pages/admin/ManageTrainings';
 import ManageEvents from './pages/admin/ManageEvents';
-// import VolunteerMap from './pages/admin/VolunteerMap';
-// import AdminReports from './pages/admin/Reports';
-// import AdminSettings from './pages/admin/Settings';
+import VolunteerMap from './pages/admin/VolunteerMap';
+import Reports from './pages/admin/Reports';
+import Settings from './pages/admin/Settings';
 
 // Volunteer Pages
 import VolunteerDashboard from './pages/volunteer/Dashboard';
-// import VolunteerProfile from './pages/volunteer/Profile';
-// import VolunteerTrainings from './pages/volunteer/Trainings';
-// import VolunteerEvents from './pages/volunteer/Events';
-// import VolunteerFeedback from './pages/volunteer/Feedback';
+import VolunteerProfile from './pages/volunteer/Profile';
+import VolunteerTrainings from './pages/volunteer/Trainings';
+import VolunteerEvents from './pages/volunteer/Events';
+import VolunteerFeedback from './pages/volunteer/Feedback';
 
 // Participant Pages
 import ParticipantDashboard from './pages/participant/Dashboard';
-// import ParticipantProfile from './pages/participant/Profile';
-// import ParticipantEvents from './pages/participant/Events';
-// import ParticipantFeedback from './pages/participant/Feedback';
-// import ParticipantSupport from './pages/participant/Support';
+import ParticipantProfile from './pages/participant/Profile';
+import ParticipantEvents from './pages/participant/Events';
+import ParticipantFeedback from './pages/participant/Feedback';
+import ParticipantSupport from './pages/participant/Support';
 
 // Auth Guards
 const ProtectedRoute = ({ element, requiredRole }) => {
@@ -83,10 +83,10 @@ function App() {
               path="/admin" 
               element={
                 // <ProtectedRoute 
-                  // element={
+                //   element={
                   <AdminLayout />
                 // } 
-                  // requiredRole="admin"
+                //   requiredRole="admin"
                 // />
               }
             >
@@ -94,43 +94,47 @@ function App() {
               <Route path="volunteers" element={<ManageVolunteers />} />
               <Route path="trainings" element={<ManageTrainings />} />
               <Route path="events" element={<ManageEvents />} />
-              {/* <Route path="map" element={<VolunteerMap />} />
-              <Route path="reports" element={<AdminReports />} />
-              <Route path="settings" element={<AdminSettings />} /> */}
+              <Route path="map" element={<VolunteerMap />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
             
             {/* Volunteer Routes */}
             <Route 
               path="/volunteer" 
               element={
-                <ProtectedRoute 
-                  element={<VolunteerLayout />} 
-                  requiredRole="volunteer"
-                />
+                // <ProtectedRoute 
+                //   element={
+                  <VolunteerLayout />
+                // } 
+                //   requiredRole="volunteer"
+                // />
               }
             >
               <Route index element={<VolunteerDashboard />} />
-              {/* <Route path="profile" element={<VolunteerProfile />} />
+              <Route path="profile" element={<VolunteerProfile />} />
               <Route path="trainings" element={<VolunteerTrainings />} />
               <Route path="events" element={<VolunteerEvents />} />
-              <Route path="feedback" element={<VolunteerFeedback />} /> */}
+              <Route path="feedback" element={<VolunteerFeedback />} />
             </Route>
             
             {/* Participant Routes */}
             <Route 
               path="/participant" 
               element={
-                <ProtectedRoute 
-                  element={<ParticipantLayout />} 
-                  requiredRole="participant"
-                />
+                // <ProtectedRoute 
+                //   element={
+                  <ParticipantLayout />
+                // } 
+                //   requiredRole="participant"
+                // />
               }
             >
               <Route index element={<ParticipantDashboard />} />
-              {/* <Route path="profile" element={<ParticipantProfile />} />
+              <Route path="profile" element={<ParticipantProfile />} />
               <Route path="events" element={<ParticipantEvents />} />
               <Route path="feedback" element={<ParticipantFeedback />} />
-              <Route path="support" element={<ParticipantSupport />} /> */}
+              <Route path="support" element={<ParticipantSupport />} />
             </Route>
             
             {/* Catch-all route */}
