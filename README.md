@@ -1,10 +1,10 @@
 # CareConnect – Centralized Volunteer Management Platform
 
-**CareConnect** is a full-stack volunteer management system built to support community-focused organizations like **NAMI Yolo**. It helps nonprofits recruit, onboard, train, and schedule volunteers with ease. The platform is built for accessibility, especially for organizations currently managing data across multiple spreadsheets and forms.
+**CareConnect** is a volunteer management system built to support community-focused organizations like **NAMI Yolo**. It helps nonprofits recruit, onboard, train, and schedule volunteers with ease. The platform is built for accessibility, especially for organizations currently managing data across multiple spreadsheets and forms.
 
 This submission includes:
 - A dynamic **web dashboard** for real-time visual insights into volunteer trends.
-- A reproducible **Google Colab notebook** for static data visualizations.
+- A reproducible **Google Colab notebook** for static data visualizations. (OpenData Hack)
 - A publicly accessible dataset used to simulate real-world volunteer data.
 
 ---
@@ -28,6 +28,7 @@ This project was submitted to multiple tracks of HackDavis 2025, including:
 - **Open Data Hack** – Uses a public dataset for static and dynamic visualizations
 - **NAMI Yolo Challenge** – Specifically built around their current spreadsheet-based limitations
 - **Best Use of Auth0** – Role-based access and authentication
+- **Best Use of Cerebras API** – Project is using Cerebras API
 - **Hackers' Choice Award**
 
 ---
